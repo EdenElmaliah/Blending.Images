@@ -8,6 +8,28 @@ import matplotlib.pyplot as plt
 import os
 
 MIN_DIM = 16
+GRAY = 1
+RGB = 2
+MAX_COLOR = 255
+TRANSFORM_MATRIX = np.array([[0.299, 0.587, 0.114],
+                           [0.596, -0.275, -0.321],
+                           [0.212, -0.523, 0.311]])
+
+
+def read_image(filename, representation):
+    """
+    reads an image file and converts it into a given representation.
+    :param filename: the filename of an image on disk (could be grayscale or RGB)
+    :param representation: representation code, either 1 or 2 defining whether the output should be a grayscale
+    image (1) or an RGB image (2). If the input image is grayscale, we won’t call it with representation = 2.
+    :return: The image. Converted if specified.
+    """
+    if representation != GRAY and representation != RGB: return
+    img = imread(filename)
+    img = img.astype(np.float64) / MAX_COLOR
+    if representation == GRAY:
+        return rgb2gray(img)
+    return img
 
 
 def build_gaussian_pyramid(im, max_levels, filter_size):
@@ -236,31 +258,5 @@ def blending_example2():
     """
     return blending_example("nyc.jpg", "puddle.jpg", "puddle_mask.jpg")
 
-###############################
-# functions from ex1
-###############################
 
-
-GRAY = 1
-RGB = 2
-MAX_COLOR = 255
-TRANSFORM_MATRIX = np.array([[0.299, 0.587, 0.114],
-                           [0.596, -0.275, -0.321],
-                           [0.212, -0.523, 0.311]])
-
-
-def read_image(filename, representation):
-    """
-    reads an image file and converts it into a given representation.
-    :param filename: the filename of an image on disk (could be grayscale or RGB)
-    :param representation: representation code, either 1 or 2 defining whether the output should be a grayscale
-    image (1) or an RGB image (2). If the input image is grayscale, we won’t call it with representation = 2.
-    :return: The image. Converted if specified.
-    """
-    if representation != GRAY and representation != RGB: return
-    img = imread(filename)
-    img = img.astype(np.float64) / MAX_COLOR
-    if representation == GRAY:
-        return rgb2gray(img)
-    return img
 
